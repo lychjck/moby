@@ -78,6 +78,12 @@ func (cli *DockerCli) LoadConfigFile() (err error) {
 	return err
 }
 
+
+/* 
+proto:传输协议
+addr：host目标地址
+tlsconfig：安全传输层协议配置 
+*/
 func NewDockerCli(in io.ReadCloser, out, err io.Writer, proto, addr string, tlsConfig *tls.Config) *DockerCli {
 	var (
 		isTerminal = false

@@ -26,6 +26,7 @@ func init() {
 }
 
 func mainDaemon() {
+	//判断剩余参数是否为0
 	if flag.NArg() != 0 {
 		flag.Usage()
 		return

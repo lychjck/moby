@@ -18,30 +18,34 @@ const (
 // to the docker daemon when you launch it with say: `docker -d -e lxc`
 // FIXME: separate runtime configuration from http api configuration
 type Config struct {
-	Pidfile                     string
-	Root                        string
-	AutoRestart                 bool
-	Dns                         []string
-	DnsSearch                   []string
-	EnableIptables              bool
-	EnableIpForward             bool
-	DefaultIp                   net.IP
-	BridgeIface                 string
-	BridgeIP                    string
-	InterContainerCommunication bool
-	GraphDriver                 string
-	GraphOptions                []string
-	ExecDriver                  string
-	Mtu                         int
-	DisableNetwork              bool
-	EnableSelinuxSupport        bool
-	Context                     map[string][]string
+	Pidfile                     string   ////Docker Daemon 所属进程的 PID 文件
+	Root                        string  //Docker 运行时所使用的 root 路径
+	AutoRestart                 bool	// 已被启用，转而支持 docker run 时的重启
+	Dns                         []string	//Docker 使用的 DNS Server 地址
+	DnsSearch                   []string	//Docker 使用的指定的 DNS 查找域名
+	EnableIptables              bool	// 启用 Docker 的 iptables 功能
+	EnableIpForward             bool	// 启用 net.ipv4.ip_forward 功能
+	DefaultIp                   net.IP	// 绑定容器端口时使用的默认 IP
+	BridgeIface                 string	// 添加容器网络至已有的网桥 
+	BridgeIP                    string	// 添加容器网络至已有的网桥 
+	InterContainerCommunication bool	// 是否允许相同 host 上容器间的通信
+	GraphDriver                 string	 //Docker 运行时使用的特定存储驱动 
+	GraphOptions                []string	 // 可设置的存储驱动选项
+	ExecDriver                  string	 // Docker 运行时使用的特定 exec 驱动
+	Mtu                         int		// 设置容器网络的 MTU
+	DisableNetwork              bool	// 有定义，之后未初始化
+	EnableSelinuxSupport        bool	// 启用 SELinux 功能的支持
+	Context                     map[string][]string	// 有定义，之后未初始化
 }
 
 // InstallFlags adds command-line options to the top-level flag parser for
 // the current process.
 // Subsequent calls to `flag.Parse` will populate config with values parsed
 // from the command-line.
+/* 定义一个为 String 类型的 flag 参数；
+该 flag 的名称为”p”或者”-pidfile”;
+该 flag 的值为” /var/run/docker.pid”, 并将该值绑定在变量 config.Pidfile 上；
+该 flag 的描述信息为"Path to use for daemon PID file"。 */
 func (config *Config) InstallFlags() {
 	flag.StringVar(&config.Pidfile, []string{"p", "-pidfile"}, "/var/run/docker.pid", "Path to use for daemon PID file")
 	flag.StringVar(&config.Root, []string{"g", "-graph"}, "/var/lib/docker", "Path to use as the root of the Docker runtime")

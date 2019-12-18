@@ -17,6 +17,14 @@ import (
 // skipped and the process terminated directly.
 // * If "DEBUG" is set in the environment, SIGQUIT causes an exit without cleanup.
 //
+
+
+/* 创建并设置一个 channel，用于发送信号通知；
+定义 signals 数组变量，初始值为 os.SIGINT, os.SIGTERM; 若环境变量 DEBUG 为空的话，则添加 os.SIGQUIT 至 signals 数组；
+通过 gosignal.Notify(c, signals...) 中 Notify 函数来实现将接收到的 signal 信号传递给 c。
+需要注意的是只有 signals 中被罗列出的信号才会被传递给 c，其余信号会被直接忽略；
+创建一个 goroutine 来处理具体的 signal 信号，当信号类型为 os.Interrupt 或者 syscall.SIGTERM 时，执行传入 Trap 函数的具体执行方法，
+形参为 cleanup(), 实参为 eng.Shutdown。 */
 func Trap(cleanup func()) {
 	c := make(chan os.Signal, 1)
 	signals := []os.Signal{os.Interrupt, syscall.SIGTERM}
